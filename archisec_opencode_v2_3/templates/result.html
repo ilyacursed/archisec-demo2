@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+{% load terminology %}
+{% block title %}Результат анализа — АрхиСек{% endblock %}
+{% block description %}Результат демонстрационного анализа: нормализованный профиль, релевантные угрозы, связанные меры защиты и средства защиты информации с объяснением связей.{% endblock %}
+{% block content %}
+
+<h1>Результат анализа</h1>
+<p class="notice"><strong>Демонстрационные данные. Не являются нормативной рекомендацией.</strong> Источник: {{ result.metadata.source|ui_label:"provenance" }} · версия {{ result.metadata.version }} · данные не подтверждены. Это демонстрационный разбор, а не нормативная модель угроз и не подтверждение защищённости.</p>
+
+<nav class="section-nav" aria-label="Разделы результата">
+  <ol>
+    <li><a href="#profile-summary">Профиль системы</a></li>
+    <li><a href="#stats">Статистика</a></li>
+    <li><a href="#threats">Угрозы</a></li>
+    <li><a href="#measures">Меры защиты</a></li>
+    <li><a href="#tools">Средства защиты информации (СЗИ)</a></li>
+    <li><a href="#why">Объяснение выбора</a></li>
+    <li><a href="#edit-profile">Изменить профиль</a></li>
+    <li><a href="#new-analysis">Новый анализ</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="profile-summary" tabindex="-1" aria-labelledby="profile-summary-title">
+  <h2 id="profile-summary-title">Профиль системы (нормализованный)</h2>
+  <dl class="summary">
+    <div><dt>Тип системы</dt><dd>{{ result.profile.system_type|ui_label:"system" }}</dd></div>
+    <div><dt>Интерфейсы</dt><dd>{% if result.profile.interfaces %}{{ result.profile.interfaces|ui_labels:"interface"|join:", " }}{% else %}не указаны{% endif %}</dd></div>
+    <div><dt>Доступна из интернета</dt><dd>{{ result.profile.internet_exposed|yesno:"Да,Нет" }}</dd></div>
+    <div><dt>Классы данных</dt><dd>{% if result.profile.data_classes %}{{ result.profile.data_classes|ui_labels:"category"|join:", " }}{% else %}не указаны{% endif %}</dd></div>
+    <div><dt>Использует искусственный интеллект</dt><dd>{{ result.profile.uses_ai|yesno:"Да,Нет" }}</dd></div>
+  </dl>
+  <p class="hint">Значения показаны после нормализации: отсутствующие поля получили демонстрационные значения по умолчанию. Профиль не сохраняется — результат живёт только в этом ответе. Категории, совпавшие с угрозами, перечислены в карточках угроз и в разделе «Объяснение выбора».</p>
+</section>
+
+<section class="section" id="stats" tabindex="-1" aria-labelledby="stats-title">
+  <h2 id="stats-title">Статистика</h2>
+  <dl class="stats">
+    <div class="stat"><dt>Релевантные угрозы</dt><dd>{{ result.statistics.threats }}</dd></div>
+    <div class="stat"><dt>Меры защиты</dt><dd>{{ result.statistics.measures }}</dd></div>
+    <div class="stat"><dt>Средства защиты информации (СЗИ)</dt><dd>{{ result.statistics.tools }}</dd></div>
+    <div class="stat">
+      <dt>Полнота демонстрационных цепочек</dt>
+      {% if presentation.coverage.selected_threats %}
+      <dd>{{ presentation.coverage.complete_path_threats }}<span class="stat-sub"> из {{ presentation.coverage.selected_threats }}</span></dd>
+      {% else %}
+      <dd>—</dd>
+      {% endif %}
+    </div>
+  </dl>
+  {% if presentation.coverage.selected_threats %}
+  <p class="hint coverage-note">Полная демонстрационная цепочка — у угрозы существует хотя бы один заданный путь «угроза → мера → средство» в этом результате: {{ presentation.coverage.complete_path_threats }} из {{ presentation.coverage.selected_threats }} отобранных угроз (без полной цепочки — {{ presentation.coverage.incomplete_path_threats }}). Это только признак существования связей в демонстрационных данных, а не оценка эффективности защиты, не подтверждение сертификации средств и не оценка соответствия требованиям.</p>
+  {% else %}
+  <p class="hint coverage-note">Отобранных угроз нет, поэтому полнота демонстрационных цепочек не вычисляется: пустой результат не означает 100% покрытия демонстрационными связями и ничего не говорит о защищённости.</p>
+  {% endif %}
+</section>
+
+<section class="section" id="threats" tabindex="-1" aria-labelledby="threats-title">
+  <h2 id="threats-title">Угрозы</h2>
+  <p class="section-note">Угрозы отобраны по совпадению категорий профиля и категорий угрозы; совпавшие категории показаны в каждой карточке. Каталог угроз — демонстрационный, не подтверждён и не является нормативной рекомендацией: это не официальная нормативная база.</p>
+  <ul class="cards">
+    {% for card in presentation.threat_cards %}
+    <li class="card" id="threat-{{ card.item.code }}" tabindex="-1">
+      <div class="card-head"><span class="code">{{ card.item.code }}</span><span class="badge">Демонстрация</span></div>
+      <h3>{{ card.item|entity_name }}</h3>
+      <p>{{ card.item|entity_description }}</p>
+      <p class="meta">Категории: {{ card.item.categories|ui_labels:"category"|join:", " }}{% if card.item.severity %} · критичность (демонстрационная): {{ card.item.severity|ui_label:"severity" }}{% endif %}</p>
+      {% if card.matched_categories %}
+      <p class="meta card-reason"><span class="reason-label">Совпавшие категории профиля:</span> {{ card.matched_categories|ui_labels:"category"|join:", " }}</p>
+      {% else %}
+      <p class="meta card-reason"><span class="reason-label">Совпавшие категории профиля:</span> не определены.</p>
+      {% endif %}
+    </li>
+    {% empty %}
+    <li class="empty-state">Релевантных угроз не найдено.</li>
+    {% endfor %}
+  </ul>
+</section>
+
+<section class="section" id="measures" tabindex="-1" aria-labelledby="measures-title">
+  <h2 id="measures-title">Меры защиты</h2>
+  <p class="section-note">Меры связаны с отобранными угрозами заданными демонстрационными связями «угроза → мера»; в каждой карточке — ссылки на связанные угрозы. Это демонстрационный подбор, а не нормативный набор требований и не гарантия защиты.</p>
+  <ul class="cards">
+    {% for card in presentation.measure_cards %}
+    <li class="card" id="measure-{{ card.item.code }}" tabindex="-1">
+      <div class="card-head"><span class="code">{{ card.item.code }}</span><span class="badge">Демонстрация</span></div>
+      <h3>{{ card.item|entity_name }}</h3>
+      <p>{{ card.item|entity_description }}</p>
+      <p class="meta">{% if card.item.categories %}Категории: {{ card.item.categories|ui_labels:"category"|join:", " }}{% endif %}{% if card.item.frameworks %}{% if card.item.categories %} · {% endif %}схемы (демонстрационные): {{ card.item.frameworks|ui_labels:"framework"|join:", " }}{% endif %}</p>
+      <p class="meta card-links"><span class="reason-label">Связанные угрозы:</span>
+        {% for code in card.threat_codes %}
+        <a class="code" href="#threat-{{ code }}">{{ code }}</a>
+        {% empty %}
+        <span class="hint">нет связанных угроз в этом результате</span>
+        {% endfor %}
+      </p>
+    </li>
+    {% empty %}
+    <li class="empty-state">Нет связанных мер защиты.</li>
+    {% endfor %}
+  </ul>
+</section>
+
+<section class="section" id="tools" tabindex="-1" aria-labelledby="tools-title">
+  <h2 id="tools-title">Средства защиты информации (СЗИ)</h2>
+  <p class="section-note">Средства связаны с мерами заданными демонстрационными связями «мера → средство»; в каждой карточке — демонстрационный класс и ссылки на связанные меры. Это демонстрационный каталог: упоминание средства не подтверждает его сертификацию и не является рекомендацией к закупке.</p>
+  <ul class="cards">
+    {% for card in presentation.tool_cards %}
+    <li class="card" id="tool-{{ card.item.code }}" tabindex="-1">
+      <div class="card-head"><span class="code">{{ card.item.code }}</span><span class="badge">Демонстрация</span></div>
+      <h3>{{ card.item|entity_name }}</h3>
+      <p>{{ card.item|entity_description }}</p>
+      {% if card.item.class %}<p class="meta">Класс: {{ card.item.class|ui_label:"class" }}</p>{% endif %}
+      <p class="meta card-links"><span class="reason-label">Связанные меры:</span>
+        {% for code in card.measure_codes %}
+        <a class="code" href="#measure-{{ code }}">{{ code }}</a>
+        {% empty %}
+        <span class="hint">нет связанных мер в этом результате</span>
+        {% endfor %}
+      </p>
+    </li>
+    {% empty %}
+    <li class="empty-state">Нет связанных средств защиты информации.</li>
+    {% endfor %}
+  </ul>
+</section>
+
+<section class="section" id="why" tabindex="-1" aria-labelledby="why-title">
+  <h2 id="why-title">Объяснение выбора</h2>
+  <p class="section-note">Для каждой отобранной угрозы: категории профиля, совпавшие с её категориями, и заданные демонстрационные цепочки «угроза → мера → средство» — код угрозы включён в каждую строку цепочки. Коды — ссылки на карточки в разделах выше.</p>
+  <ul class="expl-list">
+    {% for expl in result.explanations %}
+    <li class="expl-card">
+      <h3><a href="#threat-{{ expl.threat_code }}">{{ expl.threat_code }}</a></h3>
+      <p class="meta-label">Совпавшие категории профиля</p>
+      <ul class="chips">
+        {% for category in expl.matched_categories %}
+        <li class="chip">{{ category|ui_label:"category" }}</li>
+        {% empty %}
+        <li class="hint">категории не совпали</li>
+        {% endfor %}
+      </ul>
+      <p class="meta-label">Заданные демонстрационные цепочки</p>
+      <ul class="chain">
+        {% for m in expl.measures %}
+        <li>
+          <a class="code" href="#threat-{{ expl.threat_code }}">{{ expl.threat_code }}</a>
+          <span class="arrow" aria-hidden="true">→</span>
+          <a class="code" href="#measure-{{ m.measure_code }}">{{ m.measure_code }}</a>
+          <span class="arrow" aria-hidden="true">→</span>
+          {% for tool_code in m.tool_codes %}
+          <a class="code" href="#tool-{{ tool_code }}">{{ tool_code }}</a>
+          {% if not forloop.last %}<span class="arrow" aria-hidden="true">·</span>{% endif %}
+          {% empty %}
+          <span class="hint">без средств защиты информации</span>
+          {% endfor %}
+        </li>
+        {% empty %}
+        <li><span class="hint">Заданных демонстрационных связей с мерами для этой угрозы не найдено.</span></li>
+        {% endfor %}
+      </ul>
+    </li>
+    {% empty %}
+    <li class="empty-state">Пояснения не сформированы: релевантных угроз не найдено.</li>
+    {% endfor %}
+  </ul>
+</section>
+
+<section class="section" aria-labelledby="edit-profile-title">
+  <h2 id="edit-profile-title">Изменить профиль</h2>
+  <p class="section-note">Форма предзаполнена значениями профиля из текущего ответа и только из него. Профиль не сохраняется: отредактируйте поля и явно отправьте форму ещё раз — по тому же адресу будет выполнен новый анализ. Неизменённая отправка повторно передаёт те же строки, порядок и дубли категорий.</p>
+  <form class="form-card edit-form" id="edit-profile" method="post" action="{% url 'profile_analyze' %}" autocomplete="off">
+    {% csrf_token %}
+    {% include "partials/profile_fields.html" with form=profile_form only %}
+    <div class="form-actions">
+      <button class="button button-primary" type="submit">Проанализировать</button>
+      <p class="hint">Подстановка значений — только из текущего ответа; между запросами приложение ничего не запоминает.</p>
+    </div>
+  </form>
+</section>
+
+<section class="cta" id="new-analysis" tabindex="-1" aria-labelledby="new-analysis-title">
+  <h2 id="new-analysis-title">Новый анализ</h2>
+  <p>Профиль и результат этого анализа не сохраняются. Форма выше предзаполнена только значениями из текущего ответа. Чтобы начать заново с чистого листа, откройте форму профиля — она всегда открывается с исходными демонстрационными значениями по умолчанию (тип «Веб-приложение», отмечен только «Веб-интерфейс»).</p>
+  <a class="button button-primary" href="{% url 'profile' %}">Открыть форму профиля</a>
+</section>
+
+{% endblock %}

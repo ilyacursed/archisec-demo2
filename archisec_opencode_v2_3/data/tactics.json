@@ -1,0 +1,5 @@
+[
+  {"code":"DEMO-TACTIC-001","name":"Demo access tactic","description":"Demonstration-only tactic"},
+  {"code":"DEMO-TACTIC-002","name":"Demo manipulation tactic","description":"Demonstration-only tactic"},
+  {"code":"DEMO-TACTIC-003","name":"Demo disclosure tactic","description":"Demonstration-only tactic"}
+]

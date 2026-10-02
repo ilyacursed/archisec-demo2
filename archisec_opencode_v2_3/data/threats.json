@@ -1,0 +1,8 @@
+[
+  {"code":"DEMO-T-001","name":"Web request manipulation","description":"Demo web threat","categories":["web"],"severity":"medium","frameworks":["DEMO-FRAMEWORK-WEB"]},
+  {"code":"DEMO-T-002","name":"API abuse","description":"Demo API threat","categories":["api"],"severity":"high","frameworks":["DEMO-FRAMEWORK-API"]},
+  {"code":"DEMO-T-003","name":"Internet exposure","description":"Demo external exposure threat","categories":["internet"],"severity":"high","frameworks":["DEMO-FRAMEWORK-EXTERNAL"]},
+  {"code":"DEMO-T-004","name":"Confidential data disclosure","description":"Demo confidentiality threat","categories":["confidentiality"],"severity":"high","frameworks":["DEMO-FRAMEWORK-DATA"]},
+  {"code":"DEMO-T-005","name":"AI prompt manipulation","description":"Demo AI threat","categories":["ai"],"severity":"high","frameworks":["DEMO-FRAMEWORK-AI"]},
+  {"code":"DEMO-T-006","name":"Demo application integrity issue","description":"Demo integrity threat","categories":["web","integrity"],"severity":"medium","frameworks":["DEMO-FRAMEWORK-APP"]}
+]

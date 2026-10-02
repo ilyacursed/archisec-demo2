@@ -1,0 +1,47 @@
+{% load static %}<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>{% block title %}АрхиСек — демонстрационный анализ{% endblock %}</title>
+  <meta name="description" content="{% block description %}АрхиСек — демонстрационная система поддержки принятия решений: профиль системы → релевантные угрозы → меры защиты → средства защиты информации.{% endblock %}">
+  <link rel="icon" type="image/png" href="{% static 'img/archisec-logo.png' %}">
+  <script src="{% static 'js/theme.js' %}"></script>
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+  <a class="skip-link" href="#content">Перейти к содержимому</a>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <a href="{% url 'home' %}"><img class="brand-logo" src="{% static 'img/archisec-logo.png' %}" width="1254" height="1254" alt="АрхиСек — главная"></a>
+        <span class="badge">Демонстрация</span>
+      </div>
+      <div class="header-actions">
+        <nav aria-label="Основная навигация">
+          <ul class="nav">
+            <li><a href="{% url 'home' %}">Главная</a></li>
+            <li><a href="{% url 'profile' %}">Профиль системы</a></li>
+            <li><button class="login-button" type="button" aria-disabled="true" title="Авторизация недоступна в демонстрационной версии">Войти</button></li>
+          </ul>
+        </nav>
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false" aria-label="Включить тёмную тему" title="Включить тёмную тему" hidden>
+          <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.5 15.2A8.5 8.5 0 0 1 8.8 3.5 8.5 8.5 0 1 0 20.5 15.2Z"/></svg>
+          <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"/></svg>
+          <span class="visually-hidden theme-toggle-text">Тёмная тема</span>
+        </button>
+      </div>
+    </div>
+  </header>
+  <main id="content" class="container">
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="site-footer">
+    <div class="container">
+      <p><strong>Демонстрационные данные</strong> · Не подтверждено · Не является нормативной рекомендацией.</p>
+      <p>Каталоги, правила подбора и связи — учебные демонстрационные данные. Это не официальная нормативная база и не выгрузка ФСТЭК; результат не подтверждает сертификацию средств защиты информации, не гарантирует защищённость и не заменяет оценку соответствия требованиям.</p>
+    </div>
+  </footer>
+</body>
+</html>

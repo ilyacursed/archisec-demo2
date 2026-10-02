@@ -1,0 +1,18 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "default_agent": "orchestrator",
+  "permissions": [
+    { "action": "shell", "resource": "git push *", "effect": "deny" },
+    { "action": "read", "resource": "*.env", "effect": "ask" },
+    { "action": "read", "resource": "*.env.*", "effect": "ask" }
+  ],
+  "agents": {
+    "orchestrator": {
+      "description": "Coordinates the ArchiSec MVP development workflow",
+      "mode": "primary",
+      "permissions": [
+        { "action": "subagent", "resource": "*", "effect": "allow" }
+      ]
+    }
+  }
+}

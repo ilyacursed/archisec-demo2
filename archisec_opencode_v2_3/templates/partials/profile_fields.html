@@ -1,0 +1,62 @@
+{% load terminology %}
+{% comment %}
+  Переиспользуемые поля профиля системы.
+
+  Контекст: `form` — profile_form из services/result_presentation.py
+  (GET /profile/ — исходные демонстрационные значения; результат — значения текущего ответа).
+
+  Частичный шаблон не содержит <form> и CSRF — их задаёт родительская форма;
+  на странице используется ровно один экземпляр частичного шаблона, поэтому
+  id полей уникальны. id строятся из имени поля и номера по порядку
+  (id-interfaces-0, id-data-classes-1, ...), а не из значения категории:
+  неизвестные, пустые и дублирующиеся строки категорий отображаются в
+  точности в переданном порядке, без дедупликации, и не ломают id/якоря.
+  Значения value подставляются только через автоэкранирование Django.
+{% endcomment %}
+<div class="form-block">
+  <label for="id-system-type">Тип системы</label>
+  <select id="id-system-type" name="system_type" aria-describedby="hint-system-type">
+    {% for option in form.system_type_options %}
+    <option value="{{ option.value }}"{% if option.selected %} selected{% endif %}>{{ option.label }}</option>
+    {% endfor %}
+  </select>
+  <p class="hint" id="hint-system-type">Тип участвует в отборе угроз наравне с интерфейсами и классами данных.</p>
+</div>
+
+<fieldset>
+  <legend>Интерфейсы</legend>
+  <p class="hint" id="hint-interfaces">Каждый отмеченный интерфейс добавляет категорию к профилю системы.</p>
+  {% for option in form.interface_options %}
+  <label class="choice" for="id-interfaces-{{ forloop.counter0 }}">
+    <input type="checkbox" id="id-interfaces-{{ forloop.counter0 }}" name="interfaces" value="{{ option.value }}"{% if option.checked %} checked{% endif %} aria-describedby="hint-interfaces">
+    {{ option.label }}
+  </label>
+  {% endfor %}
+</fieldset>
+
+<div class="form-block">
+  <label class="choice" for="id-internet-exposed">
+    <input type="checkbox" id="id-internet-exposed" name="internet_exposed"{% if form.internet_exposed %} checked{% endif %} aria-describedby="hint-internet-exposed">
+    Доступна из интернета
+  </label>
+  <p class="hint" id="hint-internet-exposed">Добавляет к профилю категорию «{{ "internet"|ui_label:"category" }}».</p>
+</div>
+
+<fieldset>
+  <legend>Классы данных</legend>
+  <p class="hint" id="hint-data-classes">Отмеченные классы данных участвуют в отборе угроз наравне с интерфейсами.</p>
+  {% for option in form.data_class_options %}
+  <label class="choice" for="id-data-classes-{{ forloop.counter0 }}">
+    <input type="checkbox" id="id-data-classes-{{ forloop.counter0 }}" name="data_classes" value="{{ option.value }}"{% if option.checked %} checked{% endif %} aria-describedby="hint-data-classes">
+    {{ option.label }}
+  </label>
+  {% endfor %}
+</fieldset>
+
+<div class="form-block">
+  <label class="choice" for="id-uses-ai">
+    <input type="checkbox" id="id-uses-ai" name="uses_ai"{% if form.uses_ai %} checked{% endif %} aria-describedby="hint-uses-ai">
+    Использует искусственный интеллект
+  </label>
+  <p class="hint" id="hint-uses-ai">Добавляет к профилю категорию «{{ "ai"|ui_label:"category" }}».</p>
+</div>

@@ -1,0 +1,8 @@
+[
+  {"code":"DEMO-M-001","name":"Web filtering","description":"Demo protection measure","categories":["web"],"frameworks":["DEMO-FRAMEWORK-239","DEMO-FRAMEWORK-117"]},
+  {"code":"DEMO-M-002","name":"API gateway controls","description":"Demo API protection measure","categories":["api"],"frameworks":["DEMO-FRAMEWORK-API"]},
+  {"code":"DEMO-M-003","name":"External access control","description":"Demo perimeter measure","categories":["internet"],"frameworks":["DEMO-FRAMEWORK-EXTERNAL"]},
+  {"code":"DEMO-M-004","name":"Data access control","description":"Demo confidentiality measure","categories":["confidentiality"],"frameworks":["DEMO-FRAMEWORK-DATA"]},
+  {"code":"DEMO-M-005","name":"AI input validation","description":"Demo AI protection measure","categories":["ai"],"frameworks":["DEMO-FRAMEWORK-AI"]},
+  {"code":"DEMO-M-006","name":"Application integrity monitoring","description":"Demo integrity measure","categories":["integrity"],"frameworks":["DEMO-FRAMEWORK-APP"]}
+]

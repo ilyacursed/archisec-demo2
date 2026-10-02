@@ -1,0 +1,8 @@
+[
+  {"code":"DEMO-SZI-001","name":"Demo web security tool","class":"DEMO-SZI-CLASS-001","description":"Demo security product"},
+  {"code":"DEMO-SZI-002","name":"Demo API gateway","class":"DEMO-SZI-CLASS-002","description":"Demo security product"},
+  {"code":"DEMO-SZI-003","name":"Demo access control system","class":"DEMO-SZI-CLASS-003","description":"Demo security product"},
+  {"code":"DEMO-SZI-004","name":"Demo data protection system","class":"DEMO-SZI-CLASS-004","description":"Demo security product"},
+  {"code":"DEMO-SZI-005","name":"Demo AI security control","class":"DEMO-SZI-CLASS-005","description":"Demo security product"},
+  {"code":"DEMO-SZI-006","name":"Demo integrity monitor","class":"DEMO-SZI-CLASS-006","description":"Demo security product"}
+]

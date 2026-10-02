@@ -1,0 +1,4 @@
+[
+  {"code":"DEMO-AI-001","name":"Demo prompt manipulation","description":"Demonstration-only AI threat","methods":["DEMO-AI-METHOD-001"],"objects":["DEMO-AI-OBJECT-001"]},
+  {"code":"DEMO-AI-002","name":"Demo sensitive output leakage","description":"Demonstration-only AI threat","methods":["DEMO-AI-METHOD-002"],"objects":["DEMO-AI-OBJECT-002"]}
+]

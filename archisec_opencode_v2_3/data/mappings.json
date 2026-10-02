@@ -1,0 +1,18 @@
+{
+  "threat_measure": {
+    "DEMO-T-001": ["DEMO-M-001"],
+    "DEMO-T-002": ["DEMO-M-002"],
+    "DEMO-T-003": ["DEMO-M-003"],
+    "DEMO-T-004": ["DEMO-M-004"],
+    "DEMO-T-005": ["DEMO-M-005"],
+    "DEMO-T-006": ["DEMO-M-006"]
+  },
+  "measure_tool": {
+    "DEMO-M-001": ["DEMO-SZI-001"],
+    "DEMO-M-002": ["DEMO-SZI-002"],
+    "DEMO-M-003": ["DEMO-SZI-003"],
+    "DEMO-M-004": ["DEMO-SZI-004"],
+    "DEMO-M-005": ["DEMO-SZI-005"],
+    "DEMO-M-006": ["DEMO-SZI-006"]
+  }
+}
